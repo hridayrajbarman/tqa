@@ -22,7 +22,7 @@
                 <input id="in-user" type="text" placeholder="Username" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-green-500 outline-none">
                 <input id="in-pass" type="password" placeholder="Password" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-green-500 outline-none">
             </div>
-            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black mt-8 shadow-lg shadow-green-900/20">ACCESS PORTAL</button>
+            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black mt-8 shadow-lg">ACCESS PORTAL</button>
         </div>
     </div>
 
@@ -35,11 +35,10 @@
         <main class="p-4 space-y-6">
             <section id="home" class="tab-content active space-y-4">
                 <div class="bg-gradient-to-br from-blue-700 to-indigo-950 p-8 rounded-[2.5rem] shadow-2xl mb-6">
-                    <p class="text-[9px] uppercase font-black tracking-widest opacity-60 mb-1">Total Available Funds</p>
+                    <p class="text-[9px] uppercase font-black tracking-widest opacity-60 mb-1">Available Funds</p>
                     <h2 class="text-5xl font-black italic mb-2">₹<span id="balance">0</span></h2>
                     <p class="text-[10px] font-bold uppercase tracking-widest text-blue-200" id="user-display">---</p>
                 </div>
-                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Assigned QA Tasks</h3>
                 <div id="task-container" class="space-y-4"></div>
             </section>
 
@@ -47,7 +46,7 @@
                 <div class="bg-slate-900 p-8 rounded-[2.5rem] border border-slate-800 text-center">
                     <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl border-2 border-blue-500">👤</div>
                     <h2 id="prof-name" class="text-2xl font-black italic text-white mb-1">---</h2>
-                    <p id="prof-id" class="text-blue-500 font-mono text-xs mb-6 tracking-widest uppercase font-black">---</p>
+                    <p id="prof-id" class="text-blue-500 font-mono text-xs mb-6 font-black uppercase tracking-widest">---</p>
                     <div class="text-left space-y-3 bg-slate-950 p-5 rounded-2xl border border-slate-800 text-[10px] uppercase font-bold tracking-tighter">
                         <p class="flex justify-between"><span class="text-slate-600">Username:</span> <span id="prof-user">---</span></p>
                         <p class="flex justify-between"><span class="text-slate-600">Mobile:</span> <span id="prof-mobile">---</span></p>
@@ -61,10 +60,7 @@
                     <button class="bg-slate-900 p-6 rounded-3xl border border-green-500/20 font-black text-xs uppercase text-green-500">Deposit</button>
                     <button class="bg-slate-900 p-6 rounded-3xl border border-orange-500/20 font-black text-xs uppercase text-orange-500">Withdraw</button>
                 </div>
-                <div class="bg-slate-900 p-8 rounded-[2rem] border border-slate-800 text-center">
-                    <h3 class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4 text-left">Recent Activity</h3>
-                    <p class="py-10 text-slate-700 italic text-xs uppercase font-black">No Transactions Found</p>
-                </div>
+                <div class="bg-slate-900 p-10 rounded-[2rem] border border-slate-800 text-center italic text-slate-700 font-black uppercase text-xs">No History Found</div>
             </section>
         </main>
 
@@ -75,20 +71,12 @@
         </nav>
     </div>
 
-    <div id="modal-overlay" class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-6 backdrop-blur-md">
-        <div class="bg-slate-900 w-full max-w-sm rounded-[3rem] p-8 border border-slate-800 shadow-2xl">
-            <div id="modal-content"></div>
-            <button onclick="closeModal()" class="w-full mt-8 text-slate-600 text-[10px] font-black uppercase tracking-widest">Close</button>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, get, child, update, onValue, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBMUzq53tvH-ntEJsfRj08ReeGMSd_RmrY",
-            authDomain: "techqaportal.firebaseapp.com",
             databaseURL: "https://techqaportal-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "techqaportal",
             appId: "1:647160352590:web:ed264064d71def5480981f"
@@ -108,13 +96,11 @@
         window.handleAuth = async (type) => {
             const user = document.getElementById('in-user').value.trim();
             const pass = document.getElementById('in-pass').value.trim();
-            if(!user || !pass) return alert("Fill all fields");
-
             const snap = await get(child(ref(db), `users/${user}`));
             if (snap.exists() && snap.val().password === pass) {
                 window.currentUser = snap.val();
-                onValue(ref(db, `users/${user}`), (snapshot) => {
-                    window.currentUser = snapshot.val();
+                onValue(ref(db, `users/${user}`), (s) => {
+                    window.currentUser = s.val();
                     document.getElementById('balance').innerText = window.currentUser.balance;
                     renderTasks();
                 });
@@ -134,24 +120,22 @@
         }
 
         function renderTasks() {
-            const container = document.getElementById('task-container');
-            container.innerHTML = tasks.map(t => {
+            document.getElementById('task-container').innerHTML = tasks.map(t => {
                 const isLocked = t.id !== 5 && (!window.currentUser.permissions || !window.currentUser.permissions[`task${t.id}`]);
                 const isUnlocked = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${t.id}`];
-                
                 return `
-                    <div class="bg-slate-900/50 p-6 rounded-[2rem] border border-slate-800 flex justify-between items-center">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center text-xl">📦</div>
-                            <div>
-                                <p class="font-bold text-slate-300 ${isUnlocked ? '' : 'blur-text'} uppercase text-xs font-black">${isUnlocked ? t.name : 'HIDDEN APP'}</p>
-                                <p class="text-[8px] text-blue-500 font-black tracking-widest uppercase">TASK ${t.id}</p>
-                            </div>
+                <div class="bg-slate-900/50 p-6 rounded-[2rem] border border-slate-800 flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center">📦</div>
+                        <div>
+                            <p class="font-bold text-slate-300 ${isUnlocked ? '' : 'blur-text'} uppercase text-xs">${isUnlocked ? t.name : 'HIDDEN APP'}</p>
+                            <p class="text-[8px] text-blue-500 font-black tracking-widest uppercase">TASK ${t.id}</p>
                         </div>
-                        <button onclick="openAction(${t.id}, ${isLocked})" class="${isLocked ? 'bg-red-900/10 text-red-500' : (isUnlocked ? 'bg-green-600' : 'bg-slate-800 hover:bg-blue-600')} px-6 py-3 rounded-2xl text-[9px] font-black transition-all">
-                            ${isLocked ? 'LOCKED' : (isUnlocked ? 'DOWNLOAD' : 'UNLOCK')}
-                        </button>
-                    </div>`;
+                    </div>
+                    <button onclick="openAction(${t.id}, ${isLocked})" class="${isLocked ? 'bg-red-900/10 text-red-500' : (isUnlocked ? 'bg-green-600' : 'bg-slate-800 hover:bg-blue-600')} px-6 py-3 rounded-2xl text-[9px] font-black transition-all">
+                        ${isLocked ? 'LOCKED' : (isUnlocked ? 'DOWNLOAD' : 'UNLOCK')}
+                    </button>
+                </div>`;
             }).join('');
         }
 
@@ -162,16 +146,16 @@
             if (isUnlocked) return showLink(task);
 
             let btns = task.prices.map(p => `
-                <button onclick="buyTask(${p}, ${taskId})" class="bg-slate-950 p-5 rounded-3xl border border-slate-800 text-left hover:border-blue-500 transition-all">
-                    <span class="block text-[8px] text-slate-500 font-black uppercase">INVEST</span>
+                <button onclick="buyTask(${p}, ${taskId})" class="bg-slate-950 p-5 rounded-3xl border border-slate-800 text-left hover:border-blue-500">
+                    <span class="block text-[8px] text-slate-500 font-black">INVEST</span>
                     <span class="block font-black text-xl italic text-white my-1">₹${p}</span>
-                    <span class="block text-[9px] text-green-400 font-black tracking-widest">+40% PROFIT</span>
+                    <span class="block text-[9px] text-green-400 font-black">+40% PROFIT</span>
                 </button>`).join('');
 
+            document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('modal-content').innerHTML = `
                 <h2 class="text-2xl font-black mb-6 text-center italic uppercase text-white">Unlock Task ${taskId}</h2>
                 <div class="grid grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-2">${btns}</div>`;
-            document.getElementById('modal-overlay').classList.remove('hidden');
         };
 
         window.buyTask = async (amt, taskId) => {
@@ -191,9 +175,9 @@
             document.getElementById('modal-content').innerHTML = `
                 <div class="text-center">
                     <h2 class="text-2xl font-black italic mb-2 uppercase text-blue-500">${task.name}</h2>
-                    ${amt ? `<p class="text-[10px] text-slate-500 mb-8 font-black uppercase italic">Investment: ₹${amt}</p>` : '<p class="text-[10px] text-green-500 mb-8 font-black uppercase tracking-widest">TASK UNLOCKED</p>'}
-                    <div class="bg-slate-950 p-6 rounded-3xl border border-slate-800 mb-6 text-center">
-                        <a href="${task.link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase tracking-widest italic animate-pulse">LINK - CLICK TO DOWNLOAD</a>
+                    ${amt ? `<p class="text-[10px] text-slate-500 mb-8 font-black uppercase">Investment: ₹${amt}</p>` : '<p class="text-[10px] text-green-500 mb-8 font-black uppercase tracking-widest">TASK UNLOCKED</p>'}
+                    <div class="bg-slate-950 p-6 rounded-3xl border border-slate-800 mb-6 shadow-inner italic">
+                        <a href="${task.link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase tracking-widest animate-pulse">LINK - CLICK TO DOWNLOAD</a>
                     </div>
                 </div>`;
         }
@@ -204,6 +188,7 @@
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.replace('text-blue-500', 'text-slate-500'));
             event.currentTarget.classList.replace('text-slate-500', 'text-blue-500');
         };
+
         window.closeModal = () => document.getElementById('modal-overlay').classList.add('hidden');
     </script>
 </body>

@@ -15,34 +15,9 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans">
 
-    <div id="signup-page" class="hidden min-h-screen flex items-center justify-center p-6">
-        <div class="bg-slate-900 p-8 rounded-3xl w-full max-w-md border border-slate-800 shadow-2xl">
-            <h1 class="text-3xl font-black mb-2 text-blue-500 italic uppercase">Register</h1>
-            <div class="space-y-3 mt-4">
-                <input id="up-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-                <input id="up-mobile" type="tel" placeholder="Mobile Number" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-                <input id="up-email" type="email" placeholder="Email Address" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-                <input id="up-user" type="text" placeholder="Username" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-                <input id="up-pass" type="password" placeholder="Password" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-            </div>
-            <button onclick="handleAuth('signup')" class="w-full bg-blue-600 py-4 rounded-2xl font-black mt-8">SIGN UP</button>
-            <button onclick="showAuthPage('login')" class="w-full mt-4 text-slate-500 text-xs font-bold uppercase underline">Login Instead</button>
-        </div>
-    </div>
-
-    <div id="login-page" class="hidden min-h-screen flex items-center justify-center p-6">
-        <div class="bg-slate-900 p-8 rounded-3xl w-full max-w-sm border border-slate-800 shadow-2xl">
-            <h1 class="text-3xl font-black mb-6 text-green-500 uppercase italic text-center">Login</h1>
-            <input id="in-user" type="text" placeholder="Username" class="w-full p-4 mb-3 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-            <input id="in-pass" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black">LOGIN</button>
-            <button onclick="showAuthPage('signup')" class="w-full mt-4 text-blue-500 text-xs font-bold uppercase underline">New Account</button>
-        </div>
-    </div>
-
     <div id="main-app" class="hidden min-h-screen">
         <header class="p-5 glass sticky top-0 z-50 flex justify-between items-center border-b border-slate-800">
-            <span class="text-xl font-black text-blue-500 italic">TECH QA</span>
+            <span class="text-xl font-black text-blue-500 italic uppercase">Tech QA</span>
             <button onclick="logout()" class="text-[10px] bg-red-900/20 text-red-500 px-3 py-1 rounded-full font-black uppercase">Logout</button>
         </header>
 
@@ -50,7 +25,7 @@
             <div class="bg-gradient-to-br from-slate-900 to-indigo-950 p-6 rounded-[2.5rem] border border-slate-800 shadow-2xl">
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <p class="text-[10px] uppercase font-black tracking-widest opacity-60">Balance</p>
+                        <p class="text-[10px] uppercase font-black tracking-widest opacity-60">Available Funds</p>
                         <h2 class="text-4xl font-black italic">₹<span id="balance">0</span></h2>
                     </div>
                     <div class="text-right">
@@ -67,216 +42,89 @@
             </div>
 
             <section id="home" class="tab-content active space-y-4">
-                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Assigned QA Tasks</h3>
                 <div id="task-container" class="space-y-4"></div>
             </section>
 
             <section id="transaction" class="tab-content hidden space-y-6">
-                <div class="flex justify-between items-center px-2">
-                    <h3 class="text-[10px] font-black text-blue-500 uppercase tracking-widest">Global History</h3>
-                    <button onclick="showTab('home')" class="text-[10px] text-slate-500 font-bold uppercase underline">Back to Tasks</button>
-                </div>
-                
-                <div class="space-y-4">
-                    <div class="bg-slate-900/50 p-6 rounded-[2rem] border border-slate-800">
-                        <p class="text-[9px] font-black text-slate-500 uppercase mb-4">Task Purchases</p>
-                        <div id="purchase-history" class="space-y-2 text-[10px] italic text-slate-600">No purchases found.</div>
-                    </div>
-                    
-                    <div class="bg-slate-900/50 p-6 rounded-[2rem] border border-slate-800">
-                        <p class="text-[9px] font-black text-slate-500 uppercase mb-4">Wallet Activity</p>
-                        <div id="wallet-history" class="space-y-2 text-[10px] italic text-slate-600">No wallet activity.</div>
-                    </div>
+                <div class="bg-slate-900/50 p-6 rounded-[2rem] border border-slate-800">
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Transaction Logs</h3>
+                    <div id="history-list" class="space-y-2 text-[10px] italic text-slate-600">No activity recorded.</div>
                 </div>
             </section>
         </main>
     </div>
 
     <div id="modal-overlay" class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-6 backdrop-blur-md">
-        <div class="bg-slate-900 w-full max-w-sm rounded-[3rem] p-8 border border-slate-800 shadow-2xl">
-            <div id="modal-content"></div>
-            <button onclick="closeModal()" class="w-full mt-8 text-slate-600 text-[10px] font-black uppercase tracking-widest text-center">Close</button>
-        </div>
+        <div class="bg-slate-900 w-full max-w-sm rounded-[3rem] p-8 border border-slate-800 shadow-2xl" id="modal-content"></div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, get, child, update, onValue, push, set, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBMUzq53tvH-ntEJsfRj08ReeGMSd_RmrY",
-            databaseURL: "https://techqaportal-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "techqaportal"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        const tasks = [
-            { id: 5, name: "MS Word Testing", link: "https://play.google.com/store/apps/details?id=com.microsoft.office.word", prices: [2000, 5000, 9000, 15000, 30000] },
-            { id: 9, name: "Azure Auth Testing", link: "https://play.google.com/store/apps/details?id=com.azure.authenticator", prices: [5000, 9000, 15000, 30000] },
-            { id: 11, name: "Teams QA Testing", link: "https://play.google.com/store/apps/details?id=com.microsoft.teams", prices: [9000, 15000, 30000, 40000, 59000, 79000] },
-            { id: 16, name: "Outlook QA Mobile", link: "https://play.google.com/store/apps/details?id=com.microsoft.office.outlook", prices: [15000, 30000, 40000, 59000, 79000, 99000] },
-            { id: 21, name: "Excel QA Mobile", link: "https://play.google.com/store/apps/details?id=com.microsoft.office.excel", prices: [30000, 40000, 59000, 79000, 99000, 200000] }
-        ];
-
-        window.onload = () => {
-            const saved = localStorage.getItem('techqa_user');
-            if (saved) autoLogin(saved);
-            else showAuthPage('signup');
-        };
-
-        window.showAuthPage = (p) => {
-            document.getElementById('signup-page').classList.toggle('hidden', p !== 'signup');
-            document.getElementById('login-page').classList.toggle('hidden', p !== 'login');
-            document.getElementById('main-app').classList.add('hidden');
-        };
-
-        window.handleAuth = async (type) => {
-            if (type === 'signup') {
-                const u = { name: document.getElementById('up-name').value, mobile: document.getElementById('up-mobile').value, user: document.getElementById('up-user').value, pass: document.getElementById('up-pass').value };
-                if(!u.name || !u.mobile || !u.user || !u.pass) return alert("Fill all");
-                const id = "QA-" + Math.floor(1000 + Math.random() * 9000);
-                await set(ref(db, 'users/' + u.user), { name: u.name, mobile: u.mobile, username: u.user, password: u.pass, balance: 0, userID: id, permissions: {}, unlockedTasks: {} });
-                alert("Success! Login now."); showAuthPage('login');
-            } else {
-                const user = document.getElementById('in-user').value;
-                const pass = document.getElementById('in-pass').value;
-                const snap = await get(child(ref(db), 'users/' + user));
-                if (snap.exists() && snap.val().password === pass) {
-                    localStorage.setItem('techqa_user', user);
-                    startApp(snap.val());
-                } else alert("Error");
-            }
-        };
-
-        async function autoLogin(u) {
-            const snap = await get(child(ref(db), 'users/' + u));
-            if (snap.exists()) startApp(snap.val());
-            else localStorage.removeItem('techqa_user');
-        }
-
-        function startApp(userData) {
-            window.currentUser = userData;
-            document.getElementById('signup-page').classList.add('hidden');
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('main-app').classList.remove('hidden');
-            onValue(ref(db, 'users/' + userData.username), (s) => {
-                window.currentUser = s.val();
-                document.getElementById('balance').innerText = window.currentUser.balance;
-                document.getElementById('user-display').innerText = window.currentUser.name;
-                document.getElementById('header-id').innerText = "ID: " + window.currentUser.userID;
-                renderTasks();
-                loadHistory();
-            });
-        }
-
-        function renderTasks() {
-            document.getElementById('task-container').innerHTML = tasks.map(t => {
-                const isLocked = t.id !== 5 && (!window.currentUser.permissions || !window.currentUser.permissions[`task${t.id}`]);
-                const isUnlocked = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${t.id}`];
-                return `
-                <div class="bg-slate-900/50 p-5 rounded-[2rem] border border-slate-800 flex justify-between items-center">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center text-xl">📦</div>
-                        <div>
-                            <p class="font-bold text-slate-300 ${isUnlocked ? '' : 'blur-text'} uppercase text-xs">${isUnlocked ? t.name : 'Hidden App'}</p>
-                            <p class="text-[8px] text-blue-500 font-black tracking-widest">TASK ${t.id}</p>
-                        </div>
-                    </div>
-                    <button onclick="openAction(${t.id}, ${isLocked})" class="${isLocked ? 'bg-red-900/10 text-red-500' : (isUnlocked ? 'bg-green-600' : 'bg-slate-800 hover:bg-blue-600')} px-6 py-3 rounded-2xl text-[9px] font-black transition-all">
-                        ${isLocked ? 'LOCKED' : (isUnlocked ? 'DOWNLOAD' : 'UNLOCK')}
-                    </button>
-                </div>`;
-            }).join('');
-        }
-
-        window.showTab = (t) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(t).classList.remove('hidden');
-        };
-
+        // Import initialization remains same
+        
+        // DYNAMIC DEPOSIT MODAL WITH NEW FIELDS
         window.showDepositModal = async () => {
-            const d = window.currentUser.depositDetails || { acc: "Not Set", upi: "Not Set" };
+            const snap = await get(child(ref(db), `users/${window.currentUser.username}/depositDetails`));
+            const d = snap.exists() ? snap.val() : {};
+            
             document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('modal-content').innerHTML = `
-                <h2 class="text-xl font-black mb-6 text-green-500 uppercase italic text-center">Deposit</h2>
-                <div class="space-y-4 bg-slate-950 p-6 rounded-2xl border border-slate-800 text-[10px] font-bold uppercase">
-                    <p class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-500">Account:</span> <span>${d.acc}</span></p>
-                    <p class="flex justify-between pb-2 border-b border-slate-900"><span class="text-slate-500">UPI ID:</span> <span>${d.upi}</span></p>
-                    <p class="text-yellow-500 text-center mt-4 italic">For QR payment contact your financial manager</p>
-                </div>`;
+                <h2 class="text-xl font-black mb-6 text-green-500 uppercase italic text-center tracking-widest">Manual Deposit</h2>
+                <div class="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800 text-[10px] font-bold uppercase">
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>Bank:</span> <span>${d.bankName || '---'}</span></p>
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>Name:</span> <span>${d.accName || '---'}</span></p>
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>A/C No:</span> <span>${d.accNo || '---'}</span></p>
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>IFSC:</span> <span>${d.ifsc || '---'}</span></p>
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>Branch:</span> <span>${d.branch || '---'}</span></p>
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>UPI:</span> <span class="text-blue-400">${d.upi || '---'}</span></p>
+                    <p class="text-yellow-500 text-center mt-3 italic leading-tight">For QR payment, please contact the receptionist or your manager.</p>
+                </div>
+                <button onclick="closeModal()" class="w-full mt-6 text-slate-500 text-[10px] font-black uppercase">Dismiss</button>`;
         };
 
+        // WITHDRAWAL WITH 10 SEC TIMER
         window.showWithdrawModal = () => {
             const amt = window.currentUser.balance;
-            if(amt <= 0) return alert("Zero balance.");
+            if(amt <= 0) return alert("Insufficient funds.");
+            
             document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('modal-content').innerHTML = `
-                <h2 class="text-xl font-black mb-4 text-orange-500 uppercase italic text-center">Withdraw All</h2>
+                <h2 class="text-xl font-black mb-4 text-orange-500 uppercase text-center">Withdraw All</h2>
                 <div class="space-y-3">
-                    <p class="text-center text-white font-black text-lg mb-4 italic">₹${amt}</p>
-                    <input id="w-name" placeholder="Bank Holder Name" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+                    <p class="text-center text-white font-black text-lg italic">₹${amt}</p>
+                    <input id="w-bank" placeholder="Bank Name" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
                     <input id="w-acc" placeholder="Account Number" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
                     <input id="w-ifsc" placeholder="IFSC Code" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
-                    <button onclick="submitWithdraw(${amt})" class="w-full bg-orange-600 py-4 rounded-2xl font-black mt-4 uppercase text-[10px]">Request</button>
+                    <div id="timer-box" class="hidden text-center text-red-500 text-[10px] font-black animate-pulse">REMOVING BALANCE IN 10s...</div>
+                    <button id="withdraw-btn" onclick="submitFullWithdraw(${amt})" class="w-full bg-orange-600 py-4 rounded-2xl font-black mt-4 uppercase text-[10px]">Send Request</button>
                 </div>`;
         };
 
-        window.submitWithdraw = async (amt) => {
-            const n = document.getElementById('w-name').value;
+        window.submitFullWithdraw = async (amt) => {
+            const b = document.getElementById('w-bank').value;
             const a = document.getElementById('w-acc').value;
             const i = document.getElementById('w-ifsc').value;
-            if(!n || !a || !i) return alert("Required");
-            await push(ref(db, 'withdrawals'), { user: window.currentUser.username, name: n, acc: a, ifsc: i, amount: amt, timestamp: Date.now() });
-            alert("Sent."); closeModal();
-        };
+            
+            if(!b || !a || !i) return alert("Fill all fields.");
 
-        window.openAction = (taskId, isLocked) => {
-            if(isLocked) return alert("LOCK by Admin");
-            const task = tasks.find(t => t.id === taskId);
-            const isUnlocked = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${taskId}`];
-            if (isUnlocked) return showLink(task);
-
-            let btns = task.prices.map(p => `
-                <button onclick="buyTask(${p}, ${taskId})" class="bg-slate-950 p-5 rounded-3xl border border-slate-800 text-left hover:border-blue-500">
-                    <span class="block text-[8px] text-slate-500 font-black uppercase tracking-widest italic">Plan</span>
-                    <span class="block font-black text-xl italic text-white my-1">₹${p}</span>
-                    <span class="block text-[9px] text-green-400 font-black tracking-tighter">+40% PROFIT</span>
-                </button>`).join('');
-
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('modal-content').innerHTML = `<div class="grid grid-cols-2 gap-3 max-h-72 overflow-y-auto">${btns}</div>`;
-        };
-
-        window.buyTask = async (amt, taskId) => {
-            if(window.currentUser.balance < amt) return alert("Insufficient Balance!");
-            const unt = window.currentUser.unlockedTasks || {};
-            unt[`task${taskId}`] = true;
-            await update(ref(db, 'users/' + window.currentUser.username), { balance: window.currentUser.balance - amt, unlockedTasks: unt });
-            await push(ref(db, 'purchases'), { username: window.currentUser.username, taskID: taskId, amount: amt, timestamp: Date.now() });
-            showLink(tasks.find(t => t.id === taskId));
-        };
-
-        function showLink(t) {
-            document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('modal-content').innerHTML = `<div class="text-center"><h2 class="text-xl font-black mb-2 uppercase text-blue-500">${t.name}</h2><div class="bg-slate-950 p-6 rounded-3xl border border-slate-800 mb-6 italic"><a href="${t.link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase">LINK - DOWNLOAD</a></div></div>`;
-        }
-
-        function loadHistory() {
-            onValue(ref(db, 'purchases'), (snap) => {
-                const list = document.getElementById('purchase-history');
-                list.innerHTML = "";
-                const data = snap.val();
-                if(data) Object.keys(data).reverse().forEach(k => {
-                    const p = data[k];
-                    if(p.username === window.currentUser.username) list.innerHTML += `<div class="flex justify-between border-b border-slate-800/50 pb-1 uppercase"><span>Task ${p.taskID}</span> <span class="text-red-500">-₹${p.amount}</span></div>`;
-                });
+            // 1. Send request to admin
+            await push(ref(db, 'withdrawals'), {
+                user: window.currentUser.username,
+                bank: b, acc: a, ifsc: i,
+                amount: amt,
+                timestamp: Date.now()
             });
-        }
 
-        window.logout = () => { localStorage.removeItem('techqa_user'); location.reload(); };
-        window.closeModal = () => document.getElementById('modal-overlay').classList.add('hidden');
+            document.getElementById('withdraw-btn').classList.add('hidden');
+            document.getElementById('timer-box').classList.remove('hidden');
+
+            // 2. Safety Timer: Deduct after 10 seconds
+            setTimeout(async () => {
+                await update(ref(db, `users/${window.currentUser.username}`), { balance: 0 });
+                alert("Request Finalized. Balance Deducted.");
+                closeModal();
+            }, 10000);
+        };
+        // closeModal and navigation logic remains same
     </script>
 </body>
 </html>

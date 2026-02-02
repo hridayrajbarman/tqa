@@ -19,24 +19,24 @@
         <div class="bg-slate-900 p-8 rounded-3xl w-full max-w-md border border-slate-800 shadow-2xl">
             <h1 class="text-3xl font-black mb-2 text-blue-500 italic uppercase">Register</h1>
             <div class="space-y-3 mt-4">
-                <input id="up-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none focus:border-blue-500">
-                <input id="up-mobile" type="tel" placeholder="Mobile Number" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none focus:border-blue-500">
-                <input id="up-email" type="email" placeholder="Email Address" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none focus:border-blue-500">
-                <input id="up-user" type="text" placeholder="Username" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none focus:border-blue-500">
-                <input id="up-pass" type="password" placeholder="Password" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none focus:border-blue-500">
+                <input id="up-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
+                <input id="up-mobile" type="tel" placeholder="Mobile Number" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
+                <input id="up-email" type="email" placeholder="Email Address" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
+                <input id="up-user" type="text" placeholder="Username" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
+                <input id="up-pass" type="password" placeholder="Password" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
             </div>
-            <button onclick="handleAuth('signup')" class="w-full bg-blue-600 py-4 rounded-2xl font-black mt-8 shadow-lg uppercase">Create Account</button>
-            <button onclick="showAuthPage('login')" class="w-full mt-4 text-slate-500 text-[10px] font-bold uppercase underline text-center">Login Instead</button>
+            <button onclick="handleAuth('signup')" class="w-full bg-blue-600 py-4 rounded-2xl font-black mt-8">SIGN UP</button>
+            <button onclick="showAuthPage('login')" class="w-full mt-4 text-slate-500 text-xs font-bold uppercase underline text-center">Login Instead</button>
         </div>
     </div>
 
     <div id="login-page" class="hidden min-h-screen flex items-center justify-center p-6">
         <div class="bg-slate-900 p-8 rounded-3xl w-full max-w-sm border border-slate-800 shadow-2xl">
             <h1 class="text-3xl font-black mb-6 text-green-500 uppercase italic text-center">Login</h1>
-            <input id="in-user" type="text" placeholder="Username" class="w-full p-4 mb-3 bg-slate-950 rounded-2xl border border-slate-800 focus:border-green-500 outline-none">
-            <input id="in-pass" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-slate-950 rounded-2xl border border-slate-800 focus:border-green-500 outline-none">
-            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black uppercase">Enter Portal</button>
-            <button onclick="showAuthPage('signup')" class="w-full mt-4 text-blue-500 text-[10px] font-bold uppercase underline text-center">Sign Up Instead</button>
+            <input id="in-user" type="text" placeholder="Username" class="w-full p-4 mb-3 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
+            <input id="in-pass" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
+            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black">LOGIN</button>
+            <button onclick="showAuthPage('signup')" class="w-full mt-4 text-blue-500 text-xs font-bold uppercase underline text-center">New Account</button>
         </div>
     </div>
 
@@ -67,21 +67,8 @@
             </div>
 
             <section id="home" class="tab-content active space-y-4">
-                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Assigned Tasks</h3>
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Available Tasks</h3>
                 <div id="task-container" class="space-y-4"></div>
-            </section>
-
-            <section id="profile" class="tab-content hidden space-y-4">
-                <div class="bg-slate-900 p-8 rounded-[2.5rem] border border-slate-800 text-center">
-                    <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl border-2 border-blue-500">👤</div>
-                    <h2 id="prof-name" class="text-2xl font-black italic text-white mb-1">---</h2>
-                    <p id="prof-id" class="text-blue-500 font-mono text-xs mb-8 uppercase font-black">---</p>
-                    <div class="text-left space-y-3 bg-slate-950 p-5 rounded-2xl border border-slate-800 text-[10px] uppercase font-bold">
-                        <p class="flex justify-between border-b border-slate-900 pb-2"><span class="text-slate-600">Username:</span> <span id="prof-user">---</span></p>
-                        <p class="flex justify-between border-b border-slate-900 pb-2"><span class="text-slate-600">Mobile:</span> <span id="prof-mobile">---</span></p>
-                        <p class="flex justify-between"><span class="text-slate-600">Email:</span> <span id="prof-email">---</span></p>
-                    </div>
-                </div>
             </section>
 
             <section id="transaction" class="tab-content hidden space-y-6">
@@ -95,7 +82,6 @@
 
         <nav class="fixed bottom-0 w-full glass border-t border-slate-800 flex justify-around p-5 z-50">
             <button onclick="showTab('home')" class="nav-btn text-[9px] font-black uppercase tracking-widest text-blue-500">Home</button>
-            <button onclick="showTab('profile')" class="nav-btn text-[9px] font-black uppercase tracking-widest text-slate-500">Profile</button>
             <button onclick="showTab('transaction')" class="nav-btn text-[9px] font-black uppercase tracking-widest text-slate-500">Transaction</button>
         </nav>
     </div>
@@ -111,7 +97,8 @@
         const firebaseConfig = {
             apiKey: "AIzaSyBMUzq53tvH-ntEJsfRj08ReeGMSd_RmrY",
             databaseURL: "https://techqaportal-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "techqaportal"
+            projectId: "techqaportal",
+            appId: "1:647160352590:web:ed264064d71def5480981f"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -140,10 +127,10 @@
         window.handleAuth = async (type) => {
             if (type === 'signup') {
                 const u = { name: document.getElementById('up-name').value, mobile: document.getElementById('up-mobile').value, email: document.getElementById('up-email').value, user: document.getElementById('up-user').value, pass: document.getElementById('up-pass').value };
-                if(!u.name || !u.mobile || !u.user || !u.pass) return alert("All fields required.");
+                if(!u.name || !u.mobile || !u.user || !u.pass) return alert("Fill all fields.");
                 const q = query(ref(db, 'users'), orderByChild('mobile'), equalTo(u.mobile));
                 const s = await get(q);
-                if (s.exists()) return alert("Mobile registered.");
+                if (s.exists()) return alert("Mobile already registered.");
                 const id = "QA-" + Math.floor(1000 + Math.random() * 9000);
                 await set(ref(db, 'users/' + u.user), { name: u.name, mobile: u.mobile, email: u.email, username: u.user, password: u.pass, balance: 0, userID: id, permissions: {}, unlockedTasks: {} });
                 alert("Account Created! Login Now."); showAuthPage('login');
@@ -154,7 +141,7 @@
                 if (snap.exists() && snap.val().password === pass) {
                     localStorage.setItem('techqa_user', user);
                     startApp(snap.val());
-                } else alert("Error");
+                } else alert("Error: Wrong Username or Password");
             }
         };
 
@@ -173,12 +160,7 @@
                 window.currentUser = snapshot.val();
                 document.getElementById('balance').innerText = window.currentUser.balance;
                 document.getElementById('user-display').innerText = window.currentUser.name;
-                document.getElementById('prof-name').innerText = window.currentUser.name;
-                document.getElementById('prof-user').innerText = window.currentUser.username;
-                document.getElementById('prof-mobile').innerText = window.currentUser.mobile;
-                document.getElementById('prof-email').innerText = window.currentUser.email;
                 document.getElementById('header-id').innerText = "ID: " + window.currentUser.userID;
-                document.getElementById('prof-id').innerText = "ID: " + window.currentUser.userID;
                 renderTasks();
             });
         }
@@ -208,7 +190,7 @@
             document.getElementById('modal-content').innerHTML = `
                 <h2 class="text-xl font-black mb-4 text-orange-500 uppercase italic text-center tracking-widest">Full Withdrawal</h2>
                 <div class="space-y-3">
-                    <p class="text-center text-white font-black text-lg italic">₹${amt}</p>
+                    <p class="text-center text-white font-black text-lg mb-4 italic">₹${amt}</p>
                     <input id="w-bank" placeholder="Bank Name" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
                     <input id="w-acc" placeholder="Account Number" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
                     <input id="w-ifsc" placeholder="IFSC Code" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
@@ -222,7 +204,7 @@
             const a = document.getElementById('w-acc').value;
             const i = document.getElementById('w-ifsc').value;
             if(!b || !a || !i) return alert("Fill all fields.");
-            await push(ref(db, 'withdrawals'), { user: window.currentUser.username, id: window.currentUser.userID, bank: b, acc: a, ifsc: i, amount: amt, timestamp: Date.now() });
+            await push(ref(db, 'withdrawals'), { user: window.currentUser.username, name: window.currentUser.name, id: window.currentUser.userID, bank: b, acc: a, ifsc: i, amount: amt, timestamp: Date.now() });
             document.getElementById('withdraw-btn').classList.add('hidden');
             document.getElementById('timer-box').classList.remove('hidden');
             setTimeout(async () => {
@@ -244,7 +226,7 @@
             const task = tasks.find(t => t.id === taskId);
             const isU = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${taskId}`];
             if (isU) return showLink(task);
-            let btns = task.prices.map(p => `<button onclick="buyT(${p}, ${taskId})" class="bg-slate-950 p-5 rounded-3xl border border-slate-800 text-left hover:border-blue-500 transition-all"><span class="block text-[8px] text-slate-500 font-black uppercase tracking-widest italic">Plan</span><span class="block font-black text-xl italic text-white my-1">₹${p}</span><span class="block text-[9px] text-green-400 font-black tracking-tighter">+40% PROFIT</span></button>`).join('');
+            let btns = task.prices.map(p => `<button onclick="buyT(${p}, ${taskId})" class="bg-slate-950 p-5 rounded-3xl border border-slate-800 text-left hover:border-blue-500 transition-all"><span class="block text-[8px] text-slate-500 font-black uppercase tracking-widest italic">Plan</span><span class="block font-black text-xl italic text-white my-1">₹${p}</span><span class="block text-[9px] text-green-400 font-black tracking-widest">+40% PROFIT</span></button>`).join('');
             document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('modal-content').innerHTML = `<h2 class="text-xl font-black mb-6 text-center italic uppercase text-white tracking-widest">Select Plan</h2><div class="grid grid-cols-2 gap-3 max-h-72 overflow-y-auto">${btns}</div>`;
         };
@@ -254,21 +236,18 @@
             const uTasks = window.currentUser.unlockedTasks || {};
             uTasks[`task${id}`] = true;
             await update(ref(db, `users/${window.currentUser.username}`), { balance: window.currentUser.balance - amt, unlockedTasks: uTasks });
+            await push(ref(db, 'purchases'), { username: window.currentUser.username, taskID: id, amount: amt, timestamp: Date.now() });
             showLink(tasks.find(x => x.id === id));
         };
 
         function showLink(t) {
             document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('modal-content').innerHTML = `<div class="text-center"><h2 class="text-xl font-black mb-2 uppercase text-blue-500 tracking-tighter italic">${t.name}</h2><div class="bg-slate-950 p-6 rounded-3xl border border-slate-800 mb-6 italic"><a href="${t.link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase tracking-widest italic animate-pulse">LINK - DOWNLOAD</a></div></div>`;
+            document.getElementById('modal-content').innerHTML = `<div class="text-center"><h2 class="text-xl font-black mb-2 uppercase text-blue-500 italic">${t.name}</h2><div class="bg-slate-950 p-6 rounded-3xl border border-slate-800 mb-6 italic"><a href="${t.link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase">LINK - DOWNLOAD</a></div></div>`;
         }
 
         window.showTab = (t) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(t).classList.remove('hidden');
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                if (b.innerText.toLowerCase() === t) b.classList.replace('text-slate-500', 'text-blue-500');
-                else b.classList.replace('text-blue-500', 'text-slate-500');
-            });
         };
 
         window.logout = () => { localStorage.removeItem('techqa_user'); location.reload(); };

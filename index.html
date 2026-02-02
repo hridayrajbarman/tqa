@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TECH QA | SYSTEM</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         .hidden { display: none !important; }
         .blur-text { filter: blur(12px); user-select: none; pointer-events: none; }
@@ -18,7 +20,7 @@
             <h1 class="text-3xl font-black mb-6 text-green-500 italic uppercase text-center">Login</h1>
             <input id="in-user" type="text" placeholder="Username" class="w-full p-4 mb-3 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
             <input id="in-pass" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-            <button onclick="handleAuth()" class="w-full bg-green-600 py-4 rounded-2xl font-black uppercase tracking-widest">Access Portal</button>
+            <button id="login-btn" class="w-full bg-green-600 py-4 rounded-2xl font-black uppercase tracking-widest">Access Portal</button>
         </div>
     </div>
 
@@ -44,18 +46,21 @@
                 <div class="grid grid-cols-3 gap-2">
                     <button onclick="showDepositModal()" class="bg-green-600/10 text-green-500 py-3 rounded-2xl text-[9px] font-black uppercase border border-green-500/20">Deposit</button>
                     <button onclick="showWithdrawModal()" class="bg-orange-600/10 text-orange-500 py-3 rounded-2xl text-[9px] font-black uppercase border border-orange-500/20">Withdraw</button>
-                    <button onclick="showHistory()" class="bg-blue-600/10 text-blue-500 py-3 rounded-2xl text-[9px] font-black uppercase border border-blue-500/20">History</button>
+                    <button onclick="toggleSection('history')" class="bg-blue-600/10 text-blue-500 py-3 rounded-2xl text-[9px] font-black uppercase border border-blue-500/20">History</button>
                 </div>
             </div>
 
-            <div id="task-list-section" class="space-y-4">
-                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Assigned Tasks</h3>
+            <div id="task-section" class="space-y-4">
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">QA Tasks</h3>
                 <div id="task-container" class="space-y-4"></div>
             </div>
 
             <div id="history-section" class="hidden space-y-4">
-                <h3 class="text-[10px] font-black text-blue-500 uppercase tracking-widest px-2">Transaction History</h3>
-                <div id="history-container" class="bg-slate-900 p-6 rounded-[2rem] border border-slate-800 text-center italic text-slate-600 text-xs">No records.</div>
+                <div class="flex justify-between items-center px-2">
+                    <h3 class="text-[10px] font-black text-blue-500 uppercase tracking-widest">History</h3>
+                    <button onclick="toggleSection('tasks')" class="text-[10px] text-slate-500 font-bold uppercase underline">Back</button>
+                </div>
+                <div id="history-container" class="bg-slate-900 p-8 rounded-[2rem] border border-slate-800 text-center italic text-slate-700 font-black uppercase text-[10px]">No History</div>
             </div>
         </main>
     </div>
@@ -64,45 +69,42 @@
         <div class="bg-slate-900 w-full max-w-sm rounded-[3rem] p-8 border border-slate-800 shadow-2xl" id="modal-content"></div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, get, child, update, onValue, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+    <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBMUzq53tvH-ntEJsfRj08ReeGMSd_RmrY",
-            databaseURL: "https://techqaportal-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "techqaportal"
+            databaseURL: "https://techqaportal-default-rtdb.asia-southeast1.firebasedatabase.app"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // PERSISTENCE LOGIC
-        window.onload = () => {
+        // PERSISTENCE
+        window.onload = function() {
             const saved = localStorage.getItem('techqa_user');
             if (saved) autoLogin(saved);
         };
 
-        async function autoLogin(u) {
-            const snap = await get(child(ref(db), `users/${u}`));
-            if (snap.exists()) startApp(snap.val());
+        function autoLogin(u) {
+            db.ref('users/' + u).once('value').then(snap => {
+                if (snap.exists()) startApp(snap.val());
+            });
         }
 
-        window.handleAuth = async () => {
+        document.getElementById('login-btn').onclick = function() {
             const user = document.getElementById('in-user').value.trim();
             const pass = document.getElementById('in-pass').value.trim();
-            const snap = await get(child(ref(db), `users/${user}`));
-            if (snap.exists() && snap.val().password === pass) {
-                localStorage.setItem('techqa_user', user);
-                startApp(snap.val());
-            } else alert("Invalid Login");
+            db.ref('users/' + user).once('value').then(snap => {
+                if (snap.exists() && snap.val().password === pass) {
+                    localStorage.setItem('techqa_user', user);
+                    startApp(snap.val());
+                } else { alert("Invalid Credentials"); }
+            });
         };
 
         function startApp(userData) {
             window.currentUser = userData;
             document.getElementById('auth-container').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
-            onValue(ref(db, `users/${userData.username}`), (s) => {
+            db.ref('users/' + userData.username).on('value', s => {
                 window.currentUser = s.val();
                 document.getElementById('balance').innerText = window.currentUser.balance;
                 document.getElementById('user-display').innerText = window.currentUser.name;
@@ -111,7 +113,6 @@
             });
         }
 
-        // TASK RENDER
         function renderTasks() {
             const tasks = [
                 { id: 5, name: "MS Word Testing", link: "https://play.google.com/store/apps/details?id=com.microsoft.office.word" },
@@ -120,58 +121,73 @@
                 { id: 16, name: "Outlook QA Mobile", link: "https://play.google.com/store/apps/details?id=com.microsoft.office.outlook" },
                 { id: 21, name: "Excel QA Mobile", link: "https://play.google.com/store/apps/details?id=com.microsoft.office.excel" }
             ];
-            document.getElementById('task-container').innerHTML = tasks.map(t => {
-                const isL = t.id !== 5 && (!window.currentUser.permissions || !window.currentUser.permissions[`task${t.id}`]);
-                const isU = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${t.id}`];
-                return `<div class="bg-slate-900/50 p-5 rounded-[2rem] border border-slate-800 flex justify-between items-center"><div class="flex items-center space-x-4"><div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center text-xl">📦</div><div><p class="font-bold text-slate-300 ${isU ? '' : 'blur-text'} uppercase text-xs">${isU ? t.name : 'HIDDEN APP'}</p><p class="text-[8px] text-blue-500 font-black uppercase">TASK ${t.id}</p></div></div><button onclick="openAction(${t.id}, ${isL})" class="${isL ? 'bg-red-900/10 text-red-500' : (isU ? 'bg-green-600' : 'bg-slate-800')} px-6 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest">${isL ? 'LOCKED' : (isU ? 'DOWNLOAD' : 'UNLOCK')}</button></div>`;
-            }).join('');
+            let html = "";
+            tasks.forEach(t => {
+                const isL = t.id !== 5 && (!window.currentUser.permissions || !window.currentUser.permissions['task' + t.id]);
+                const isU = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks['task' + t.id];
+                html += `<div class="bg-slate-900/50 p-5 rounded-[2rem] border border-slate-800 flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center text-xl">📦</div>
+                        <div>
+                            <p class="font-bold text-slate-300 ${isU ? '' : 'blur-text'} uppercase text-xs">${isU ? t.name : 'HIDDEN APP'}</p>
+                            <p class="text-[8px] text-blue-500 font-black uppercase tracking-widest">TASK ${t.id}</p>
+                        </div>
+                    </div>
+                    <button onclick="openAction(${t.id}, ${isL})" class="${isL ? 'bg-red-900/10 text-red-500' : (isU ? 'bg-green-600' : 'bg-slate-800')} px-6 py-3 rounded-2xl text-[9px] font-black uppercase">${isL ? 'LOCKED' : (isU ? 'DOWNLOAD' : 'UNLOCK')}</button>
+                </div>`;
+            });
+            document.getElementById('task-container').innerHTML = html;
         }
 
-        // WITHDRAWAL 10s AUTO-ZERO
-        window.showWithdrawModal = () => {
+        window.showWithdrawModal = function() {
             const amt = window.currentUser.balance;
-            if(amt <= 0) return alert("Zero balance.");
+            if (amt <= 0) return alert("Zero balance.");
             document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('modal-content').innerHTML = `
                 <h2 class="text-xl font-black mb-4 text-orange-500 uppercase text-center italic">Transfer All</h2>
                 <div class="space-y-3">
-                    <p class="text-center text-white font-black text-lg italic">Amount: ₹${amt}</p>
+                    <p class="text-center text-white font-black text-lg italic">₹${amt}</p>
                     <input id="w-bank" placeholder="Bank Name" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
                     <input id="w-acc" placeholder="Account Number" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
                     <input id="w-ifsc" placeholder="IFSC Code" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs">
-                    <div id="timer-box" class="hidden text-center text-red-500 text-[10px] font-black animate-pulse">ZEROING ACCOUNT IN 10s...</div>
-                    <button id="withdraw-btn" onclick="submitWithdraw(${amt})" class="w-full bg-orange-600 py-4 rounded-2xl font-black mt-4 uppercase text-[10px]">Confirm</button>
+                    <div id="timer-box" class="hidden text-center text-red-500 text-[10px] font-black animate-pulse">SETTING BALANCE TO ZERO IN 10s...</div>
+                    <button id="withdraw-btn" onclick="submitWithdraw(${amt})" class="w-full bg-orange-600 py-4 rounded-2xl font-black mt-4 uppercase text-[10px]">Submit</button>
                 </div>`;
         };
 
-        window.submitWithdraw = async (amt) => {
+        window.submitWithdraw = function(amt) {
             const b = document.getElementById('w-bank').value;
             const a = document.getElementById('w-acc').value;
             const i = document.getElementById('w-ifsc').value;
-            if(!b || !a || !i) return alert("All fields required.");
-            await push(ref(db, 'withdrawals'), { user: window.currentUser.username, name: window.currentUser.name, bank: b, acc: a, ifsc: i, amount: amt, timestamp: Date.now() });
+            if(!b || !a || !i) return alert("Fields required");
+            db.ref('withdrawals').push({ user: window.currentUser.username, name: window.currentUser.name, bank: b, acc: a, ifsc: i, amount: amt, timestamp: Date.now() });
             document.getElementById('withdraw-btn').classList.add('hidden');
             document.getElementById('timer-box').classList.remove('hidden');
-            setTimeout(async () => {
-                await update(ref(db, `users/${window.currentUser.username}`), { balance: 0 });
+            setTimeout(() => {
+                db.ref('users/' + window.currentUser.username).update({ balance: 0 });
                 alert("Deducted."); closeModal();
-            }, 10000);
+            }, 10000); // 10s Safety delay
         };
 
-        window.showDepositModal = async () => {
-            const snap = await get(child(ref(db), `users/${window.currentUser.username}/depositDetails`));
-            const d = snap.exists() ? snap.val() : {};
+        window.showDepositModal = function() {
+            const d = window.currentUser.depositDetails || {};
             document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('modal-content').innerHTML = `<h2 class="text-xl font-black mb-6 text-green-500 uppercase text-center italic">Deposit Details</h2><div class="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800 text-[10px] font-bold uppercase"><p class="flex justify-between border-b border-slate-900 pb-1"><span>Bank:</span> <span>${d.bankName || '---'}</span></p><p class="flex justify-between border-b border-slate-900 pb-1"><span>A/C No:</span> <span>${d.accNo || '---'}</span></p><p class="flex justify-between border-b border-slate-900 pb-1"><span>IFSC:</span> <span>${d.ifsc || '---'}</span></p><p class="text-yellow-500 text-center mt-3 italic leading-tight font-black uppercase tracking-tighter">For QR payment contact the receptionist or your manager</p></div>`;
+            document.getElementById('modal-content').innerHTML = `
+                <h2 class="text-xl font-black mb-6 text-green-500 uppercase text-center italic">Deposit</h2>
+                <div class="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800 text-[10px] font-bold uppercase">
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>Bank:</span> <span>${d.bankName || '---'}</span></p>
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>A/C No:</span> <span>${d.accNo || '---'}</span></p>
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>IFSC:</span> <span>${d.ifsc || '---'}</span></p>
+                    <p class="text-yellow-500 text-center mt-3 italic leading-tight font-black uppercase tracking-tighter">For QR payment contact the receptionist or your manager</p>
+                </div>`;
         };
 
-        window.showHistory = () => {
-            document.getElementById('task-list-section').classList.add('hidden');
-            document.getElementById('history-section').classList.remove('hidden');
+        window.toggleSection = function(sec) {
+            document.getElementById('task-section').classList.toggle('hidden', sec === 'history');
+            document.getElementById('history-section').classList.toggle('hidden', sec !== 'history');
         };
-
-        window.logout = () => { localStorage.removeItem('techqa_user'); location.reload(); };
-        window.closeModal = () => document.getElementById('modal-overlay').classList.add('hidden');
+        window.logout = function() { localStorage.removeItem('techqa_user'); location.reload(); };
+        window.closeModal = function() { document.getElementById('modal-overlay').classList.add('hidden'); };
     </script>
 </body>
 </html>

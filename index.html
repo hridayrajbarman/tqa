@@ -17,69 +17,77 @@
 
     <div id="auth-container" class="min-h-screen flex items-center justify-center p-6">
         <div id="signup-page" class="bg-slate-900 p-8 rounded-3xl w-full max-w-md border border-slate-800 shadow-2xl">
-            <h1 class="text-3xl font-black mb-2 text-blue-500 italic">Join Team</h1>
-            <p class="text-slate-500 text-[10px] mb-6 uppercase tracking-[0.3em]">Premium QA Testing</p>
+            <h1 class="text-3xl font-black mb-2 text-blue-500 italic uppercase">Register</h1>
             <div class="space-y-3">
                 <input id="up-name" type="text" placeholder="Full Name" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-blue-500 outline-none">
                 <input id="up-mobile" type="tel" placeholder="Mobile Number" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-blue-500 outline-none">
+                <input id="up-email" type="email" placeholder="Email Address" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-blue-500 outline-none">
                 <input id="up-user" type="text" placeholder="Username" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-blue-500 outline-none">
                 <input id="up-pass" type="password" placeholder="Password" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-blue-500 outline-none">
             </div>
-            <button onclick="handleAuth('signup')" class="w-full bg-blue-600 py-4 rounded-2xl font-black mt-8 shadow-lg shadow-blue-900/40">SIGN UP</button>
-            <button onclick="toggleAuth(false)" class="w-full mt-4 text-slate-500 text-xs uppercase font-bold">Login Instead</button>
+            <button onclick="handleAuth('signup')" class="w-full bg-blue-600 py-4 rounded-2xl font-black mt-8">SIGN UP</button>
+            <button onclick="toggleAuth(false)" class="w-full mt-4 text-slate-500 text-xs uppercase font-bold text-center">Login Instead</button>
         </div>
 
         <div id="login-page" class="hidden bg-slate-900 p-8 rounded-3xl w-full max-w-md border border-slate-800 shadow-2xl">
-            <h1 class="text-3xl font-black mb-2 text-green-500 italic">Welcome</h1>
-            <p class="text-slate-500 text-[10px] mb-6 uppercase tracking-[0.3em]">Secure Access</p>
+            <h1 class="text-3xl font-black mb-2 text-green-500 italic uppercase">Login</h1>
             <div class="space-y-4">
                 <input id="in-user" type="text" placeholder="Username" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-green-500 outline-none">
                 <input id="in-pass" type="password" placeholder="Password" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 focus:border-green-500 outline-none">
             </div>
-            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black mt-8">LOGIN</button>
-            <button onclick="toggleAuth(true)" class="w-full mt-4 text-slate-500 text-xs uppercase font-bold">New Account</button>
+            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black mt-8">ACCESS PORTAL</button>
+            <button onclick="toggleAuth(true)" class="w-full mt-4 text-slate-500 text-xs uppercase font-bold text-center">New Account</button>
         </div>
     </div>
 
     <div id="main-app" class="hidden pb-24">
         <header class="p-5 glass sticky top-0 z-50 flex justify-between items-center border-b border-slate-800">
-            <span class="text-xl font-black text-blue-500 tracking-tighter">TECH QA <span class="text-white text-[10px] font-normal opacity-40 ml-1">PRO</span></span>
+            <span class="text-xl font-black text-blue-500 tracking-tighter uppercase italic">Tech QA</span>
             <span id="header-id" class="text-[9px] text-slate-500 font-mono tracking-widest">ID: ----</span>
         </header>
 
         <main class="p-4 space-y-6">
-            <div class="bg-gradient-to-br from-blue-700 to-indigo-950 p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
-                <div class="relative z-10">
-                    <p class="text-[9px] uppercase font-black tracking-[0.2em] opacity-60 mb-1">Available Funds</p>
-                    <h2 class="text-5xl font-black italic mb-6">₹<span id="balance">0</span></h2>
+            <section id="home" class="tab-content active space-y-4">
+                <div class="bg-gradient-to-br from-blue-700 to-indigo-950 p-8 rounded-[2.5rem] shadow-2xl mb-6">
+                    <p class="text-[9px] uppercase font-black tracking-widest opacity-60 mb-1">Total Balance</p>
+                    <h2 class="text-5xl font-black italic mb-2">₹<span id="balance">0</span></h2>
                     <p class="text-[10px] font-bold uppercase tracking-widest text-blue-200" id="user-display">---</p>
                 </div>
-            </div>
-
-            <section id="home" class="tab-content active space-y-4">
-                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-2">Assigned Tasks</h3>
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Assigned QA Tasks</h3>
                 <div id="task-container" class="space-y-4"></div>
             </section>
 
-            <section id="profile" class="tab-content hidden p-6 text-center">
-                <div class="w-24 h-24 bg-slate-800 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl border-2 border-blue-500">👤</div>
-                <h2 id="prof-name" class="text-2xl font-black italic text-white mb-1">---</h2>
-                <p id="prof-id" class="text-blue-500 font-mono text-xs mb-10 tracking-widest">---</p>
-                <button onclick="location.reload()" class="w-full py-4 text-red-500 border border-red-500/30 rounded-2xl font-black uppercase text-xs tracking-widest">Terminate Session</button>
+            <section id="profile" class="tab-content hidden space-y-4">
+                <div class="bg-slate-900 p-8 rounded-[2.5rem] border border-slate-800 text-center">
+                    <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl border-2 border-blue-500">👤</div>
+                    <h2 id="prof-name" class="text-2xl font-black italic text-white mb-1">---</h2>
+                    <p id="prof-id" class="text-blue-500 font-mono text-xs mb-6 tracking-widest">---</p>
+                    <div class="text-left space-y-3 bg-slate-950 p-5 rounded-2xl border border-slate-800 text-[10px] uppercase font-bold">
+                        <p class="flex justify-between"><span class="text-slate-500">Mobile:</span> <span id="prof-mobile">---</span></p>
+                        <p class="flex justify-between"><span class="text-slate-500">Email:</span> <span id="prof-email">---</span></p>
+                    </div>
+                    <button onclick="location.reload()" class="w-full mt-8 py-4 text-red-500 border border-red-500/30 rounded-2xl font-black uppercase text-[10px] tracking-widest">Logout</button>
+                </div>
             </section>
 
-            <section id="transaction" class="tab-content hidden space-y-4">
+            <section id="transaction" class="tab-content hidden space-y-6">
                 <div class="grid grid-cols-2 gap-4">
-                    <button onclick="showDeposit()" class="bg-slate-900 p-6 rounded-3xl border border-green-500/20 font-black text-xs uppercase">Deposit</button>
-                    <button onclick="showWithdraw()" class="bg-slate-900 p-6 rounded-3xl border border-orange-500/20 font-black text-xs uppercase">Withdraw</button>
+                    <button onclick="showDeposit()" class="bg-slate-900 p-6 rounded-3xl border border-green-500/20 font-black text-xs uppercase text-green-500">Deposit</button>
+                    <button onclick="showWithdraw()" class="bg-slate-900 p-6 rounded-3xl border border-orange-500/20 font-black text-xs uppercase text-orange-500">Withdraw</button>
+                </div>
+                <div class="bg-slate-900 p-8 rounded-[2rem] border border-slate-800">
+                    <h3 class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-4">Activity Log</h3>
+                    <div id="history-list" class="text-center py-10 text-slate-600 italic text-xs">
+                        No transactions found.
+                    </div>
                 </div>
             </section>
         </main>
 
         <nav class="fixed bottom-0 w-full glass border-t border-slate-800 flex justify-around p-5 z-50">
-            <button onclick="showTab('home')" class="text-[9px] font-black uppercase tracking-widest text-blue-500">Tasks</button>
-            <button onclick="showTab('profile')" class="text-[9px] font-black uppercase tracking-widest text-slate-500">Profile</button>
-            <button onclick="showTab('transaction')" class="text-[9px] font-black uppercase tracking-widest text-slate-500">Wallet</button>
+            <button onclick="showTab('home')" class="nav-btn text-[9px] font-black uppercase tracking-widest text-blue-500">Home</button>
+            <button onclick="showTab('profile')" class="nav-btn text-[9px] font-black uppercase tracking-widest text-slate-500">Profile</button>
+            <button onclick="showTab('transaction')" class="nav-btn text-[9px] font-black uppercase tracking-widest text-slate-500">Wallet</button>
         </nav>
     </div>
 
@@ -113,24 +121,21 @@
             { id: 21, name: "Excel Mobile", link: "https://play.google.com/store/apps/details?id=com.microsoft.office.excel", prices: [30000, 40000, 59000, 79000, 99000, 200000] }
         ];
 
-        window.addEventListener('blur', () => { location.reload(); });
-
         window.handleAuth = async (type) => {
             if (type === 'signup') {
                 const name = document.getElementById('up-name').value.trim();
                 const mobile = document.getElementById('up-mobile').value.trim();
+                const email = document.getElementById('up-email').value.trim();
                 const user = document.getElementById('up-user').value.trim();
                 const pass = document.getElementById('up-pass').value.trim();
 
-                if(!name || !mobile || !user || !pass) return alert("All fields required.");
-                
+                if(!name || !mobile || !email || !user || !pass) return alert("Required fields missing.");
                 const mobileSnap = await get(query(ref(db, 'users'), orderByChild('mobile'), equalTo(mobile)));
-                if(mobileSnap.exists()) return alert("Mobile number already in use.");
+                if(mobileSnap.exists()) return alert("Mobile registered.");
 
                 const id = "QA-" + Math.floor(1000 + Math.random() * 9000);
-                await set(ref(db, 'users/' + user), { name, mobile, username: user, password: pass, balance: 0, userID: id, permissions: { task9: false, task11: false, task16: false, task21: false } });
-                alert("Account created! Login now.");
-                toggleAuth(false);
+                await set(ref(db, 'users/' + user), { name, mobile, email, username: user, password: pass, balance: 0, userID: id, permissions: { task9: false, task11: false, task16: false, task21: false }, unlockedTasks: {} });
+                alert("Account Ready!"); toggleAuth(false);
             } else {
                 const user = document.getElementById('in-user').value.trim();
                 const pass = document.getElementById('in-pass').value.trim();
@@ -143,91 +148,99 @@
                         renderTasks();
                     });
                     enterApp();
-                } else { alert("Invalid login."); }
+                } else { alert("Login failed."); }
             }
         };
 
-        function enterApp() {
+        window.enterApp = () => {
             document.getElementById('auth-container').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
             document.getElementById('user-display').innerText = window.currentUser.name;
             document.getElementById('prof-name').innerText = window.currentUser.name;
+            document.getElementById('prof-mobile').innerText = window.currentUser.mobile;
+            document.getElementById('prof-email').innerText = window.currentUser.email;
             document.getElementById('header-id').innerText = "ID: " + window.currentUser.userID;
             document.getElementById('prof-id').innerText = "ID: " + window.currentUser.userID;
-        }
+        };
 
         function renderTasks() {
             const container = document.getElementById('task-container');
             container.innerHTML = tasks.map(t => {
                 const isLocked = t.id !== 5 && (!window.currentUser.permissions || !window.currentUser.permissions[`task${t.id}`]);
+                const isUnlocked = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${t.id}`];
                 return `
-                    <div class="bg-slate-900/40 p-5 rounded-[2rem] border border-slate-800 flex justify-between items-center">
+                    <div class="bg-slate-900/50 p-5 rounded-[2rem] border border-slate-800 flex justify-between items-center transition-all">
                         <div class="flex items-center space-x-4">
-                            <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center">📦</div>
+                            <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center text-xl shadow-inner">📦</div>
                             <div>
-                                <p class="font-bold text-slate-300 blur-text uppercase text-xs">Hidden App</p>
+                                <p class="font-bold text-slate-300 ${isUnlocked ? '' : 'blur-text'} uppercase text-xs tracking-tight">${isUnlocked ? t.name : 'Hidden App'}</p>
                                 <p class="text-[8px] text-blue-500 font-black tracking-widest">TASK ${t.id}</p>
                             </div>
                         </div>
-                        <button onclick="openAction(${t.id}, ${isLocked})" class="${isLocked ? 'bg-red-900/10 text-red-500' : 'bg-slate-800 hover:bg-blue-600'} px-6 py-3 rounded-2xl text-[9px] font-black transition-all">
-                            ${isLocked ? 'LOCKED' : 'UNLOCK'}
+                        <button onclick="openAction(${t.id}, ${isLocked})" class="${isLocked ? 'bg-red-900/20 text-red-500' : (isUnlocked ? 'bg-green-600' : 'bg-slate-800 hover:bg-blue-600')} px-6 py-3 rounded-2xl text-[9px] font-black transition-all">
+                            ${isLocked ? 'LOCKED' : (isUnlocked ? 'DOWNLOAD' : 'UNLOCK')}
                         </button>
                     </div>`;
             }).join('');
         }
 
         window.openAction = (taskId, isLocked) => {
-            if(isLocked) return alert("LOCK by Admin");
             const task = tasks.find(t => t.id === taskId);
+            const isUnlocked = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${taskId}`];
+            if (isUnlocked) return showDownloadPage(task);
+            if (isLocked) return alert("LOCK by Admin");
+
             let btns = task.prices.map(p => `
-                <button onclick="confirmPurchase(${p}, ${taskId})" class="bg-slate-950 p-5 rounded-3xl border border-slate-800 text-left hover:border-blue-500 transition-all">
-                    <span class="block text-[8px] text-slate-500 font-black">PLAN</span>
-                    <span class="block font-black text-xl italic">₹${p}</span>
+                <button onclick="confirmPurchase(${p}, ${taskId})" class="bg-slate-950 p-5 rounded-3xl border border-slate-800 text-left hover:border-blue-500">
+                    <span class="block text-[8px] text-slate-500 font-black uppercase tracking-widest">Select</span>
+                    <span class="block font-black text-xl italic text-white my-1">₹${p}</span>
                     <span class="block text-[9px] text-green-400 font-bold tracking-tighter">+₹${Math.floor(p * 0.4)} PROFIT</span>
                 </button>`).join('');
 
             document.getElementById('modal-content').innerHTML = `
-                <h2 class="text-2xl font-black mb-6 text-center italic uppercase">Select Plan</h2>
+                <h2 class="text-xl font-black mb-6 text-center italic uppercase text-white tracking-widest">Choose Plan</h2>
                 <div class="grid grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-2">${btns}</div>`;
             document.getElementById('modal-overlay').classList.remove('hidden');
         };
 
         window.confirmPurchase = async (amt, taskId) => {
-            if(window.currentUser.balance < amt) return alert("Insufficient Balance!");
+            if(window.currentUser.balance < amt) return alert("Insufficient funds.");
             const task = tasks.find(t => t.id === taskId);
             const newBal = window.currentUser.balance - amt;
+            const unlockedTasks = window.currentUser.unlockedTasks || {};
+            unlockedTasks[`task${taskId}`] = true;
 
-            await update(ref(db, `users/${window.currentUser.username}`), { balance: newBal });
-            await push(ref(db, 'purchases'), {
-                username: window.currentUser.username,
-                userID: window.currentUser.userID,
-                taskID: taskId,
-                plan: amt,
-                timestamp: Date.now()
-            });
+            await update(ref(db, `users/${window.currentUser.username}`), { balance: newBal, unlockedTasks: unlockedTasks });
+            await push(ref(db, 'purchases'), { username: window.currentUser.username, userID: window.currentUser.userID, taskID: taskId, plan: amt, timestamp: Date.now() });
+            showDownloadPage(task, amt);
+        };
 
+        function showDownloadPage(task, amt = null) {
+            document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('modal-content').innerHTML = `
                 <div class="text-center">
-                    <h2 class="text-2xl font-black italic mb-2 uppercase">${task.name}</h2>
-                    <p class="text-[10px] text-slate-500 mb-8 font-bold">DEDUCTED: -₹${amt}</p>
-                    <div class="bg-slate-950 p-5 rounded-3xl border border-slate-800 mb-6">
-                        <a href="${task.link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase tracking-widest">Link - Click to Download</a>
+                    <h2 class="text-xl font-black italic mb-2 uppercase text-blue-500 tracking-tighter">${task.name}</h2>
+                    ${amt ? `<p class="text-[9px] text-slate-500 mb-8 font-black uppercase italic">Investment: ₹${amt}</p>` : '<p class="text-[9px] text-green-500 mb-8 font-black uppercase tracking-widest">QA Active</p>'}
+                    <div class="bg-slate-950 p-6 rounded-3xl border border-slate-800 mb-6 shadow-inner">
+                        <a href="${task.link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase tracking-[0.2em] animate-pulse">Download Now</a>
                     </div>
-                    <p class="text-[8px] text-yellow-500 font-black uppercase">Verify QA after install</p>
                 </div>`;
+        }
+
+        window.showTab = (t) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(t).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.replace('text-blue-500', 'text-slate-500'));
+            event.currentTarget.classList.replace('text-slate-500', 'text-blue-500');
         };
 
         window.toggleAuth = (show) => {
             document.getElementById('signup-page').classList.toggle('hidden', !show);
             document.getElementById('login-page').classList.toggle('hidden', show);
         };
-        window.showTab = (t) => {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(t).classList.remove('hidden');
-        };
         window.closeModal = () => document.getElementById('modal-overlay').classList.add('hidden');
-        window.showDeposit = () => alert("Contact Admin for manual deposit.");
-        window.showWithdraw = () => alert("Minimum withdrawal ₹500. Contact Admin.");
+        window.showDeposit = () => alert("Deposit manual.");
+        window.showWithdraw = () => alert("Withdraw manual.");
     </script>
 </body>
 </html>

